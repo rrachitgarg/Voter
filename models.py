@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+import uuid
+
 
 #create a new sqlalchemy object
 db = SQLAlchemy()
@@ -15,12 +17,32 @@ class Base(db.Model):
 class Topics(Base, db.Model):
 
     title = db.Column(db.String(500))
+    status = db.Column(db.Boolean, default=1)
 
     def __repr__(self):
         return self.title
 
+    def to_json(self):
+        return {
+            'title': self.title,
+            'options': [
+
+               { 'name': option.option.name,
+                'vote_count': option.vote_count
+               }
+               for option in self.options.all()
+            ],
+            'status': self.status
+        }
+
 class Options(Base, db.Model):
-    name = db.Column(db.String(200))
+    name = db.Column(db.String(200),unique=True)
+
+    def to_json(self):
+        return  {
+                'id': uuid.uuid4(),
+                'name': self.name
+                }
 
 
 class Polls(Base, db.Model):
@@ -28,8 +50,6 @@ class Polls(Base, db.Model):
     topic_id = db.Column(db.Integer,db.ForeignKey('topics.id'))
     option_id = db.Column(db.Integer,db.ForeignKey('options.id'))
     vote_count = db.Column(db.Integer,default=0)
-    status = db.Column(db.Boolean)      # whether poll is opened or closed
-
 
     # To define relationship b/w diff models
     topic = db.relationship('Topics', foreign_keys=[topic_id], backref=db.backref('options', lazy='dynamic'))

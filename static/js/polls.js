@@ -81,8 +81,8 @@ var LivePreview = React.createClass({
 
         return(
         <div className="panel panel-success">
-        <div className="panel-heading">
-            <h4>{this.props.title}</h4>
+        <div className="panel-heading text-center">
+            <h4 align="center">{this.props.title}</h4>
         </div>
         <div className="panel-body">
             <form>

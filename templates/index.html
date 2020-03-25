@@ -12,20 +12,17 @@
     <title>Voter</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <!-- <link href="{{url_for('static', filename='css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet"> -->
-    <link href="static/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <!-- <link href="{{url_for('static', filename='css/jumbotron-narrow.css')}}" rel="stylesheet"> -->
-    <link href="static/css/jumbotron-narrow.css" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/jumbotron-narrow.css')}}" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <!-- <script src="{{url_for('static', filename='js/ie-emulation-modes-warning.js')}}"></script> -->
-    <script src="static/js/ie-emulation-modes-warning.js"></script>
+    <script src="{{url_for('static', filename='js/ie-emulation-modes-warning.js')}}"></script>
 
   </head>
 
@@ -44,7 +41,7 @@
           <li role="presentation"><a href="https://github.com/RachitG001">GitHub</a></li>
           </ul>
         </nav>
-        <a href="/"><img src="static/images/logo.png" alt="Logo" height="60px" width="60px" /></a>
+        <a href="/"><img src="{{url_for('static', filename='images/logo.png')}}" alt="Logo" height="60px" width="60px" /></a>
       </div>
       <div class="jumbotron">
         <h1>It's easier with Voter</h1>
@@ -98,8 +95,7 @@
 
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <!-- <script src="{{url_for('static', filename='/js/ie10-viewport-bug-workaround.js')}}"></script> -->
-    <script src="static/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="{{url_for('static', filename='js/ie10-viewport-bug-workaround.js')}}"></script>
 
   </body>
 </html>
