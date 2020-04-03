@@ -36,15 +36,10 @@ def home():
 def signup():
 
     if request.method == 'POST':
-        print('Heyyyy')
         email = request.form['email']
-        print(email)
         username = request.form['username']
-        print(username)
         password = request.form['password']
         password = generate_password_hash(password)
-        print(password)
-
         user = Users(email=email,username=username,password=password)
         db.session.add(user)
         db.session.commit()
@@ -83,12 +78,24 @@ def logout():
 def polls():
     return render_template('polls.html')
 
+@voter.route('/polls/<poll_name>')
+def poll(poll_name):
+    return render_template('index.html')
+
+@voter.route('/api/poll/<poll_name>')
+def api_poll(poll_name):
+    poll = Topics.query.filter(Topics.title.like(poll_name)).first()
+
+    return jsonify({
+        'Polls': [poll.to_json()]
+    }) if poll else jsonify({
+        'message': 'Poll not found'
+    })
 
 @voter.route('/api/polls', methods=['GET','POST'])
 def api_polls():
     if request.method=='POST':
         poll = request.get_json()
-
         # Simple validations to check if all values are properly selected
         for key,value in poll.items():
             if not value:
@@ -97,10 +104,10 @@ def api_polls():
         title = poll['title']
         options_query = lambda option : Options.query.filter(Options.name.like(option))
 
-        options = [Polls(options=Options(name=option))
-                    if options_query(option).count==0
+        options = [Polls(option=Options(name=option))
+                    if options_query(option).count() == 0
                     else Polls(option=options_query(option).first())
-                    for option in poll['option']]
+                    for option in poll['options']]
 
         new_topic = Topics(title=title, options=options)
         db.session.add(new_topic)
@@ -118,7 +125,7 @@ def api_polls():
 @voter.route('/api/polls/options')
 def api_polls_options():
 
-    app_options = [options.to_json() for option in Options.query.all()]
+    all_options = [option.to_json() for option in Options.query.all()]
     return jsonify(all_options)
 
 @voter.route('/api/polls/vote', methods=['PATCH'])
@@ -130,7 +137,7 @@ def api_poll_vote():
 
     join_tables = Polls.query.join(Topics).join(Options)
 
-    option = join_tables.filter(Topics.title.like(poll_title)).filter(Options.name.like(option)).first
+    option = join_tables.filter(Topics.title.like(poll_title)).filter(Options.name.like(option)).first()
 
     if option:
         option.vote_count +=1
@@ -139,6 +146,7 @@ def api_poll_vote():
         return jsonify({'message': 'Thank you for voting'})
     else:
         return jsonify({'message': 'Option or poll was not found. Please try again'})
+
 
 if __name__ == "__main__":
 

@@ -32,8 +32,14 @@ class Topics(Base, db.Model):
                }
                for option in self.options.all()
             ],
-            'status': self.status
+            'status': self.status,
+            'total_vote': self.total_vote()
         }
+
+    def total_vote(self,total=0):
+        for option in self.options.all():
+            total+=option.vote_count
+        return total
 
 class Options(Base, db.Model):
     name = db.Column(db.String(200),unique=True)
@@ -64,3 +70,6 @@ class Users(Base):
     email = db.Column(db.String(100),unique=True)
     username = db.Column(db.String(50),unique=True)
     password = db.Column(db.String(200))
+
+    def __repr__(self):
+        return self.username
